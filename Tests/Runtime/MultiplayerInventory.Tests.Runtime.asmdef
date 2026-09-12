@@ -1,0 +1,19 @@
+{
+    "name": "MultiplayerInventory.Tests.Runtime",
+    "rootNamespace": "",
+    "references": [
+        "GUID:1491147abca9d7d4bb7105af628b223e",
+        "GUID:27619889b8ba8c24980f49ee34dbb44a",
+        "GUID:07ff66024df908f49a27ab8896b13646",
+        "GUID:0d0243c226d5dab4fb5d34006a1ad53b"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,12 @@
+.DS_Store
+Thumbs.db
+
+*.sincl
+*.bxwb
+*.idb
+
+.vs/
+.idea/
+*.csproj
+*.sln
+*.suo

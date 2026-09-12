@@ -1,0 +1,9 @@
+{
+  "name": "com.matthewscohen.multiplayerinventory",
+  "version": "1.0.0",
+  "displayName": "Multiplayer Inventory",
+  "unity": "6000.6",
+  "dependencies": {
+    "com.unity.netcode.gameobjects": "2.13.1"
+  }
+}
