@@ -6,9 +6,9 @@ public class WorldItem : NetworkBehaviour
     [SerializeField] private int TemplateID;
     [SerializeField] private DynamicItemData DynamicItemData;
 
-    public int InstanceID;
+    [HideInInspector] public int InstanceID;
 
-    public override void OnNetworkSpawn()
+    private void Start()
     {
         if(!IsServer) return;
 
@@ -20,6 +20,9 @@ public class WorldItem : NetworkBehaviour
         if(!IsServer) return;
 
         if(inventory.TryPickUpItem(InstanceID))
-            NetworkObject.Despawn();
+        {
+            NetworkObject.Despawn(false);
+            Destroy(gameObject);
+        }
     }
 }
