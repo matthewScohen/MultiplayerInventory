@@ -34,8 +34,7 @@ public class Inventory : NetworkBehaviour
     }
 
     /// <summary>
-    /// Attempt to pick up an item. Will return false if the item is invalid or already owned. Will attempt to fill available hotbar slots then
-    /// available backpack slots. Will return false if the hotbar and backpack are already full.
+    /// Attempt to pick up an item. Will return false if the item is invalid or already owned.
     /// </summary>
     /// <param name="instanceID"></param>
     /// <returns>If pickup succeeded</returns>

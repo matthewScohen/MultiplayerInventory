@@ -3,7 +3,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 using Unity.Netcode;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 public class PlayerInventoryTest
 {
@@ -12,10 +12,7 @@ public class PlayerInventoryTest
     private GameObject PlayerInventoryGameObject;
 
     private Inventory inventory;
-    private InventoryUI inventoryUI;
-
-    private const int DefaultBackpackSize = 20;
-    private const int DefaultHotbarSize = 5;
+    private TestInventoryUI inventoryUI;
 
     [UnitySetUp]
     public IEnumerator Setup()
@@ -41,7 +38,7 @@ public class PlayerInventoryTest
         PlayerInventoryGameObject = new GameObject("Inventory");
         NetworkObject playerInventoryNetworkObject = PlayerInventoryGameObject.AddComponent<NetworkObject>();
         inventory = PlayerInventoryGameObject.AddComponent<Inventory>();
-        inventoryUI = PlayerInventoryGameObject.AddComponent<InventoryUI>();
+        inventoryUI = PlayerInventoryGameObject.AddComponent<TestInventoryUI>();
         fieldInfo.SetValue(playerInventoryNetworkObject, (uint)PlayerInventoryGameObject.name.GetHashCode());
         playerInventoryNetworkObject.Spawn();
     }
@@ -103,8 +100,8 @@ public class PlayerInventoryTest
         // Check inventory has correct number of items
         Assert.AreEqual(inventory.ItemCount, numItemsToTest);
 
-        // Drop items in hotbar and check ownership
-        for(int i = 0; i < DefaultHotbarSize; i++)
+        // Drop items and check ownership
+        for(int i = 0; i < numItemsToTest / 2; i++)
         {
             inventory.RemoveItem(i);
             Assert.AreEqual(inventory.ItemCount, numItemsToTest - i - 1);
@@ -125,11 +122,7 @@ public class PlayerInventoryTest
     [UnityTest]
     public IEnumerator TestInventoryUI()
     {
-        // Get local inventory list from inventoryUI via reflection since its private
-        var field = typeof(InventoryUI).GetField(
-        "LocalInventoryList",
-        System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-        var localUIList = (ObservableCollection<int>)field.GetValue(inventoryUI);
+        List<int> localUIList = inventoryUI.GetLocalInventory();
 
         const int numberItemsToTest = 10;
         CreateItems(numberItemsToTest);
