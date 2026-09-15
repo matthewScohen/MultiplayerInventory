@@ -18,9 +18,10 @@ public class Inventory : NetworkBehaviour
     }
 
     /// <summary>
-    /// Use the currently held item.
+    /// Execute one of the currently held item's actions.
+    /// <param name="actionID">The id of the action to use</param>
     /// </summary>
-    public void UseHeldItem()
+    public void UseHeldItem(int actionID)
     {
         int heldItemInstanceID = InventoryList[ActiveInventorySlot.Value];
         ItemRegistryEntry heldItemEntry = ItemRegistry.Instance.GetEntry(heldItemInstanceID);
@@ -29,8 +30,8 @@ public class Inventory : NetworkBehaviour
 
         ItemTemplateSO heldItemTemplate = ItemTemplateDatabase.GetItemTemplate(heldItemEntry.TemplateID);
 
-        heldItemTemplate.ServerUseRpc(NetworkObject, heldItemInstanceID);
-        heldItemTemplate.ClientUseRpc(NetworkObject, heldItemInstanceID);
+        heldItemTemplate.ServerUseRpc(NetworkObject, heldItemInstanceID, actionID);
+        heldItemTemplate.ClientUseRpc(NetworkObject, heldItemInstanceID, actionID);
     }
 
     /// <summary>
