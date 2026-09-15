@@ -24,7 +24,7 @@ public class Inventory : NetworkBehaviour
     {
         int heldItemInstanceID = InventoryList[ActiveInventorySlot.Value];
         ItemRegistryEntry heldItemEntry = ItemRegistry.Instance.GetEntry(heldItemInstanceID);
-        if(heldItemEntry.IsValid)
+        if(!heldItemEntry.IsValid)
             return;
 
         ItemTemplateSO heldItemTemplate = ItemTemplateDatabase.GetItemTemplate(heldItemEntry.TemplateID);
