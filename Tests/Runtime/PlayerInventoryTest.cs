@@ -12,7 +12,7 @@ public class PlayerInventoryTest
     private GameObject PlayerInventoryGameObject;
 
     private Inventory inventory;
-    private TestInventoryUI inventoryUI;
+    private TestLocalInventory inventoryUI;
 
     [UnitySetUp]
     public IEnumerator Setup()
@@ -38,7 +38,7 @@ public class PlayerInventoryTest
         PlayerInventoryGameObject = new GameObject("Inventory");
         NetworkObject playerInventoryNetworkObject = PlayerInventoryGameObject.AddComponent<NetworkObject>();
         inventory = PlayerInventoryGameObject.AddComponent<Inventory>();
-        inventoryUI = PlayerInventoryGameObject.AddComponent<TestInventoryUI>();
+        inventoryUI = PlayerInventoryGameObject.AddComponent<TestLocalInventory>();
         fieldInfo.SetValue(playerInventoryNetworkObject, (uint)PlayerInventoryGameObject.name.GetHashCode());
         playerInventoryNetworkObject.Spawn();
     }

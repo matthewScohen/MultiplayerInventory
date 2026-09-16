@@ -2,12 +2,12 @@ using UnityEngine;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(Inventory))]
-public abstract class InventoryUI : MonoBehaviour
+public abstract class LocalInventory : MonoBehaviour
 {
     protected readonly List<int> LocalInventoryList = new();
-    private Inventory Inventory;
+    protected Inventory Inventory;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         Inventory = GetComponent<Inventory>();
         IntializeLocalInventory();

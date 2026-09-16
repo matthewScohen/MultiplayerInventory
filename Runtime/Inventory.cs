@@ -55,7 +55,7 @@ public class Inventory : NetworkBehaviour
             {
                 InventoryList[i] = instanceID;
                 ItemRegistry.Instance.SetOwned(instanceID, true);
-                itemPickedUp.Invoke();
+                itemPickedUp?.Invoke();
                 return true;
             }
         }

@@ -8,7 +8,7 @@ public class CreateHeldItem : MonoBehaviour
     [SerializeField] private ItemTemplateDataBaseSO ItemTemplateDatabase;
     [SerializeField] private Transform HandTransform;
 
-    public GameObject HeldGameObject;
+    [HideInInspector] public GameObject HeldGameObject;
 
     private Inventory Inventory;
 
