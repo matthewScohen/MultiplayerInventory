@@ -8,11 +8,14 @@ public class WorldItem : NetworkBehaviour
 
     [HideInInspector] public int InstanceID;
 
-    private void Start()
+    public override void OnNetworkSpawn()
     {
         if(!IsServer) return;
 
-        InstanceID = ItemRegistry.Instance.RegisterItem(TemplateID, DynamicItemData);
+        if (ItemRegistry.Instance != null && ItemRegistry.Instance.IsReady)
+            RegisterSelf();
+        else
+            ItemRegistry.Instance.OnRegistryReady += RegisterSelf;
     }
 
     public void PickUp(Inventory inventory)
@@ -24,5 +27,10 @@ public class WorldItem : NetworkBehaviour
             NetworkObject.Despawn(false);
             Destroy(gameObject);
         }
+    }
+
+    private void RegisterSelf()
+    {
+        InstanceID = ItemRegistry.Instance.RegisterItem(TemplateID, DynamicItemData);
     }
 }

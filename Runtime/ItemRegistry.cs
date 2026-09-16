@@ -1,5 +1,6 @@
 using Unity.Netcode;
 using UnityEngine;
+using System;
 using System.Collections.Generic;
 
 public class ItemRegistry : NetworkBehaviour
@@ -7,6 +8,8 @@ public class ItemRegistry : NetworkBehaviour
     public static ItemRegistry Instance { get; private set; }
 
     public readonly NetworkList<ItemRegistryEntry> ItemRegistryEntries = new();
+    public Action OnRegistryReady;
+    public bool IsReady = false;
     private readonly SortedSet<int> AvailableInstanceIDs = new();
 
     private void Awake()
@@ -21,10 +24,16 @@ public class ItemRegistry : NetworkBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    public override void OnNetworkSpawn()
+    {
+        IsReady = true;
+        OnRegistryReady?.Invoke();
+    }
+
     public int RegisterItem(int templateID, DynamicItemData dynamicItemData)
     {
-        Debug.Assert(IsServer, "Only the server should register items.");
-        if(!IsServer) return -1;
+        Debug.Assert(NetworkManager.Singleton.IsServer, "Only the server should register items.");
+        if(!NetworkManager.Singleton.IsServer) return -1;
 
         int instanceID;
 
@@ -45,6 +54,9 @@ public class ItemRegistry : NetworkBehaviour
     {
         Debug.Assert(IsServer, "Only the server should deregister items.");
         if(!IsServer) return;
+
+        if(ItemRegistryEntries[instanceID].Owned)
+            Debug.LogWarning($"Degistered item with instanceID {instanceID} while it was owned");
 
         ItemRegistryEntries[instanceID] = ItemRegistryEntry.Empty;
         AvailableInstanceIDs.Add(instanceID);
