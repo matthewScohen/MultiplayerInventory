@@ -1,5 +1,6 @@
 using UnityEngine;
 using Unity.Netcode;
+using System;
 
 public class Inventory : NetworkBehaviour
 {
@@ -8,6 +9,7 @@ public class Inventory : NetworkBehaviour
 
     public NetworkList<int> InventoryList = new();
     public NetworkVariable<int> ActiveInventorySlot = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    public Action itemPickedUp;
 
     public int ItemCount => CountItemsInInventory();
 
@@ -53,6 +55,7 @@ public class Inventory : NetworkBehaviour
             {
                 InventoryList[i] = instanceID;
                 ItemRegistry.Instance.SetOwned(instanceID, true);
+                itemPickedUp.Invoke();
                 return true;
             }
         }
@@ -90,6 +93,20 @@ public class Inventory : NetworkBehaviour
         int itemBInstanceID = InventoryList[itemIndexB];
         InventoryList[itemIndexA] = itemBInstanceID;
         InventoryList[itemIndexB] = itemAInstanceID;
+    }
+
+    /// <summary>
+    /// Get the inventory index of the item with intanceID
+    /// </summary>
+    /// <param name="instanceID"></param>
+    /// <returns>The inventory index of the item with instanceID or -1 if the instanceID is not in the inventory</returns>
+    public int GetInventoryIndex(int instanceID)
+    {
+        for(int i = 0; i < InventorySize; i++)
+            if(InventoryList[i] == instanceID)
+                return i;
+        
+        return -1;
     }
 
     /// <summary>

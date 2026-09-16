@@ -6,7 +6,7 @@ public abstract class ItemTemplateSO : ScriptableObject
     public int TemplateID;
     public string Name;
     public Sprite Icon;
-    public GameObject ModelPrefab;
+    public GameObject ItemPrefab;
 
     /// <summary>
     /// Execute the server-side logic for using this item's action.
