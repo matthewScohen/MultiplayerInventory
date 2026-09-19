@@ -4,9 +4,8 @@ using System;
 
 public class Inventory : NetworkBehaviour
 {
-    [SerializeField] public const int InventorySize = 20;
     [SerializeField] private ItemTemplateDataBaseSO ItemTemplateDatabase;
-
+    public int InventorySize = 20;
     public NetworkList<int> InventoryList = new();
     public NetworkVariable<int> ActiveInventorySlot = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
     public Action itemPickedUp;
@@ -30,10 +29,22 @@ public class Inventory : NetworkBehaviour
         if(!heldItemEntry.IsValid)
             return;
 
-        ItemTemplateSO heldItemTemplate = ItemTemplateDatabase.GetItemTemplate(heldItemEntry.TemplateID);
+        UseHeldItemServerRpc(heldItemEntry.TemplateID, heldItemInstanceID, actionID);
+        UseHeldItemClientsRpc(heldItemEntry.TemplateID, heldItemInstanceID, actionID);
+    }
 
-        heldItemTemplate.ServerUseRpc(NetworkObject, heldItemInstanceID, actionID);
-        heldItemTemplate.ClientUseRpc(NetworkObject, heldItemInstanceID, actionID);
+    [Rpc(SendTo.Server)]
+    private void UseHeldItemServerRpc(int templateID, int itemInstanceID, int actionID)
+    {
+        ItemTemplateSO heldItemTemplate = ItemTemplateDatabase.GetItemTemplate(templateID);
+        heldItemTemplate.ServerUse(NetworkObject, itemInstanceID, actionID);
+    }
+
+    [Rpc(SendTo.Everyone)]
+    private void UseHeldItemClientsRpc(int templateID, int itemInstanceID, int actionID)
+    {
+        ItemTemplateSO heldItemTemplate = ItemTemplateDatabase.GetItemTemplate(templateID);
+        heldItemTemplate.ClientUse(NetworkObject, itemInstanceID, actionID);
     }
 
     /// <summary>

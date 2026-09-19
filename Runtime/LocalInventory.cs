@@ -1,8 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Unity.Netcode;
 
 [RequireComponent(typeof(Inventory))]
-public abstract class LocalInventory : MonoBehaviour
+public abstract class LocalInventory : NetworkBehaviour
 {
     protected readonly List<int> LocalInventoryList = new();
     protected Inventory Inventory;
